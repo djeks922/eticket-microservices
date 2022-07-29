@@ -14,12 +14,6 @@ spec:
       containers:
       - name: auth
         image: djeks922/auth
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
-        ports:
-        - containerPort: 3000
 ---
 apiVersion: v1
 kind: Service
