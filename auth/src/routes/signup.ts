@@ -1,15 +1,27 @@
-import express from "express";
-
+import express, { Request, Response } from "express";
+import { body, validationResult } from "express-validator";
+import { RequestValidationError } from "../exceptions/requestValidationError";
+import { DatabaseError } from "../exceptions/databaseError";
 const router = express.Router();
 
-router.post("/api/users/signup", (req, res) => {
-  const { email, password } = req.body;
+router.post(
+  "/api/users/signup",
+  [
+    body("email").isEmail().notEmpty(),
+    body("password").isString().notEmpty().trim().isLength({min:3,max:16}),
+  ],
+  (req: Request, res: Response) => {
+    const errors = validationResult(req)
 
-  if (!email || typeof email !== "string") {
-    res.status(400).send({ message: "Email invalid", status: 400 });
+    if(!errors.isEmpty()){
+      throw new RequestValidationError(errors.array())
+    }
+
+    const { email, password } = req.body;
+    throw new DatabaseError()
+
+    res.send({ email, password });
   }
-
-  res.send({email,password});
-});
+);
 
 export { router as signUpRouter };
