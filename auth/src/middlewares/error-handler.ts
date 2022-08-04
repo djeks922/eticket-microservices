@@ -1,12 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import { CustomError } from "../exceptions/customError";
 
-export const errorHandler = (
+export const errorHandler = async (
   err: Error,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+
+  console.log(err.message,req.ip)
   if (err instanceof CustomError) {
     return res.status(err.statusCode).send({ errors: err.serializeError() });
   }
