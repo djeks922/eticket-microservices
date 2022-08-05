@@ -24,7 +24,7 @@ router.post(
       }
 
       const isValid = await Password.compare(user.password, password);
-      console.log(isValid);
+      
       if (!isValid) {
         throw new BadRequestError("Password is not valid");
       }
