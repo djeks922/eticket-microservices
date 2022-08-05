@@ -1,9 +1,9 @@
 import express, { NextFunction, Request, Response } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import { User } from "../models/user";
-import { RequestValidationError } from "../exceptions/requestValidationError";
 import { BadRequestError } from "../exceptions/badRequestError";
 import jwt from "jsonwebtoken";
+import { validateRequest } from "../middlewares/validateRequest";
 const router = express.Router();
 
 router.post(
@@ -12,14 +12,9 @@ router.post(
     body("email").isEmail().notEmpty(),
     body("password").isString().notEmpty().trim().isLength({ min: 3, max: 16 }),
   ],
+  validateRequest,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const errors = validationResult(req);
-
-      if (!errors.isEmpty()) {
-        throw new RequestValidationError(errors.array());
-      }
-
       const { email, password } = req.body;
 
       const existingUser = await User.findOne({ email });
