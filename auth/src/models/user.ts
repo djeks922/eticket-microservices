@@ -21,16 +21,25 @@ const userSchema = new Schema(
     email: { type: String, required: true },
     password: { type: String, required: true },
   },
-  { timestamps: true }
+  { timestamps: true, 
+    toJSON: { 
+      transform(doc, ret) {
+        delete ret.password
+        delete ret.__v
+        delete ret._id
+        ret.id = doc._id
+      } 
+    } 
+  }
 );
 
-userSchema.pre('save', async function() {
-  if(this.isModified('password')){
-    const hashedPass = await Password.toHash(this.password)
+userSchema.pre("save", async function () {
+  if (this.isModified("password")) {
+    const hashedPass = await Password.toHash(this.password);
     // this.set('password',hashedPass)
-    this.password = hashedPass
+    this.password = hashedPass;
   }
-})
+});
 
 userSchema.statics.build = (
   attrs: CreationAttrs
