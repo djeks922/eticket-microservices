@@ -22,7 +22,7 @@ export const authMiddleware = async (
 ) => {
   try {
     if(!req.session?.jwt){
-        return next(new NotAuthorizedError())
+        return next()
     }
 
     const payload = jwt.verify(req.session.jwt,process.env.JWT_KEY!) as JwtPayload
