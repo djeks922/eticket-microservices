@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export default ({ currentUser }) => {
+const Header =  ({ currentUser }) => {
   const links = [
     !currentUser && { label: 'Sign Up', href: '/auth/signup' },
     !currentUser && { label: 'Sign In', href: '/auth/signin' },
@@ -20,7 +20,7 @@ export default ({ currentUser }) => {
   return (
     <nav className="navbar navbar-light bg-light">
       <Link href="/">
-        <a className="navbar-brand">GitTix</a>
+        <a className="navbar-brand">ETICKETS</a>
       </Link>
 
       <div className="d-flex justify-content-end">
@@ -29,3 +29,5 @@ export default ({ currentUser }) => {
     </nav>
   );
 };
+
+export default Header;
